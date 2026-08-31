@@ -19,3 +19,8 @@ untrusted. A pull request opened here from a fork must:
 Nothing here prints a secret's value. Presence is reported as a word, never as bytes.
 
 The control: a push run on this repository is trusted and must see the secret.
+
+## The contribution
+
+This line was written from a fork the base repository does not control. If the untrusted path
+works, the run it triggers starts no jobs until somebody approves it, and then sees no secrets.
