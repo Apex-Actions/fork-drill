@@ -17,3 +17,10 @@ untrusted. A pull request opened here from a fork must:
 `push` run on a branch of this repository is the control: it must see the secret as present.
 
 Nothing here prints a secret's value. Presence is reported as a word, never as bytes.
+
+The control: a push run on this repository is trusted and must see the secret.
+
+## The contribution
+
+This line was written from a fork the base repository does not control. If the untrusted path
+works, the run it triggers starts no jobs until somebody approves it, and then sees no secrets.
