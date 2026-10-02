@@ -17,6 +17,13 @@ jobs:
           echo "base repo = ${{ github.repository }}"
           echo "head repo = ${{ github.event.pull_request.head.repo.full_name }}"
 
+      # BUG-0222 and BUG-0248: GitHub gives a pull request's merge commit and an annotated tag's commit as GITHUB_SHA.
+      - name: Which commit is this
+        run: |
+          echo "GITHUB_REF = ${GITHUB_REF}"
+          echo "GITHUB_SHA = ${GITHUB_SHA}"
+          echo "head sha   = ${{ github.event.pull_request.head.sha }}"
+
       - name: Is the repository secret present
         env:
           DRILL_SECRET: ${{ secrets.DRILL_SECRET }}
