@@ -17,3 +17,4 @@ untrusted. A pull request opened here from a fork must:
 `push` run on a branch of this repository is the control: it must see the secret as present.
 
 Nothing here prints a secret's value. Presence is reported as a word, never as bytes.
+probe 2026-10-02T02:33:07Z (BUG-0222)
