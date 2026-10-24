@@ -1,0 +1,13 @@
+name: approval-drill
+
+# TASK-0506 / TASK-0509: one job behind an Apex environment whose required reviewer is a person, so the approval
+# e-mail can be read live. Dispatch only — it never runs on its own.
+on:
+  workflow_dispatch:
+
+jobs:
+  gated:
+    runs-on: apex-2core
+    environment: approval-drill
+    steps:
+      - run: echo "approved — the environment let this job through"
