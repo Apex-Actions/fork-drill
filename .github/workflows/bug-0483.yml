@@ -1,0 +1,43 @@
+name: bug-0483
+
+# BUG-0483's live read (2026-11-07): a job labels the App's pin pull request with its GITHUB_TOKEN; GitHub starts no
+# workflow from that, so `listener` must never run. `actions/checkout@v4` is unpinned on purpose, for Pin actions.
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: the pull request to label
+        required: true
+  pull_request:
+    types: [labeled]
+  pull_request_target:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  label:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: apex-2core
+    steps:
+      - uses: actions/checkout@v4
+      - name: Label the pull request with the job's own token
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ inputs.pr }}
+        run: |
+          code=$(curl -sS -o /tmp/out.json -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" -H 'Accept: application/vnd.github+json' \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/issues/${PR}/labels" \
+            -d '{"labels":["bug-0483-drill"]}')
+          echo "HTTP ${code}"
+          test "${code}" = 200
+
+  listener:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: apex-2core
+    steps:
+      - run: echo "BUG-0483 — a labeled event started a run (${{ github.event_name }}); it should not have"
